@@ -20,13 +20,39 @@ double fast_ddot(size_t n, const double* x, const double* y)
 	uint64_t yalign = ((uint64_t)y) & ALIGN_CHECK;
 	uint64_t align  = ((((yalign>0)?1:0)<<1) | ((xalign>0)?1:0));
 
+	/*
+	    YMM regiser variables
+	*/
+	double ymm0,ymm1,ymm2,ymm3;
+	double ymm4,ymm5,ymm6,ymm7;
+	double ymm8,ymm9,ymm10,ymm11;
+	double ymm12,ymm13,ymm14,ymm15;
+
 	double value = 0e0;
 	if( !align ){
-	/* aligiment case 0 */
-		while( n-- ){ value += (*(x++))*(*(y++)); }
+		/* aligiment case 0 */
+		ymm12 = 0e0;
+		while( n-- ){ 
+			ymm0  = *x; // Load
+			ymm4  = *y; // Load
+			ymm8  = ymm0  * ymm4; // Mul
+			ymm12 = ymm12 + ymm8; // Add
+			x++;
+			y++;
+		}
+		value = ymm12;
 	}else{
-	/* aligiment case 1,2 or 3 */
-		while( n-- ){ value += (*(x++))*(*(y++)); }
+		/* aligiment case 1,2 or 3 */
+		ymm12 = 0e0;
+		while( n-- ){ 
+			ymm0  = *x; // Load
+			ymm4  = *y; // Load
+			ymm8  = ymm0  * ymm4; // Mul
+			ymm12 = ymm12 + ymm8; // Add
+			x++;
+			y++;
+		}
+		value = ymm12;
 	}
 	return value;
 }
