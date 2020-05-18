@@ -25,7 +25,7 @@ int check_error( double a, double b, double corr ){
 		}
 	}
 	if( diff > DBL_EPSILON * dmax ){
-		printf("Difference Error : original = %G, tuned = %G, diff = %G\n",a,b,diff);
+		printf("Difference Error : original = %G, tuned = %G, diff = %G, eps = %G\n",a,b,diff,DBL_EPSILON*dmax);
 		error++;
 	}
 
