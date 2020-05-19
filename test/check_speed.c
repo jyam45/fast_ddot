@@ -1,6 +1,8 @@
 #include "check_speed.h"
 #include "Timer.h"
 
+#define OVERFLOW_GUIRD 1024*1024
+
 double check_speed( test_t* test ){
 
 	double *x,*y;
@@ -9,8 +11,8 @@ double check_speed( test_t* test ){
 
 	/* init */
 	for( int i=0; i<test->nvec; i++ ){
-		x[i] = (double)i;
-		y[i] = (double)i;
+		x[i] = (double)(i%OVERFLOW_GUIRD);
+		y[i] = (double)(i%OVERFLOW_GUIRD);
 	}
 
 	/* speed test */

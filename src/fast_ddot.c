@@ -23,17 +23,17 @@ double fast_ddot(size_t n, const double* x, const double* y)
 	/*
 	    YMM regiser variables
 	*/
-	long double ymm0,ymm1,ymm2,ymm3;
-	long double ymm4,ymm5,ymm6,ymm7;
-	long double ymm8,ymm9,ymm10,ymm11;
-	long double ymm12,ymm13,ymm14,ymm15;
+	double ymm0,ymm1,ymm2,ymm3;
+	double ymm4,ymm5,ymm6,ymm7;
+	double ymm8,ymm9,ymm10,ymm11;
+	double ymm12,ymm13,ymm14,ymm15;
 
 	/*
 	    Unrolled Indeces
 	*/
 	size_t n_unroll;
 
-	long double value = 0e0;
+	double value = 0e0;
 	if( !align ){
 		/* aligiment case 0 */
 		ymm12 = 0e0;
