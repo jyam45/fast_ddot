@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define MAXDIM 128*1024*1024
+#define MAXDIM 1024*1024*1024
 
 int main( int argc, char** argv ){
 
