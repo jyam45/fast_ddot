@@ -257,6 +257,26 @@ double fast_ddot(size_t n, const double* x, const double* y)
 			::);
 
 		n_unroll = (n>>4);  // Unroll by 16 elements
+
+		__asm__ __volatile__(
+			"\n\t"
+			"vmovupd   0*8(%[x]), %%ymm0 \n\t"
+			"vmovupd   4*8(%[x]), %%ymm1 \n\t"
+			"vmovupd   8*8(%[x]), %%ymm2 \n\t"
+			"vmovupd  12*8(%[x]), %%ymm3 \n\t"
+			"vmovupd   0*8(%[y]), %%ymm4 \n\t"
+			"vmovupd   4*8(%[y]), %%ymm5 \n\t"
+			"vmovupd   8*8(%[y]), %%ymm6 \n\t"
+			"vmovupd  12*8(%[y]), %%ymm7 \n\t"
+			"\n\t"
+			"subq $-16*8, %[x]\n\t"
+			"subq $-16*8, %[y]\n\t"
+			"\n\t"
+			:[x]"=r"(x),[y]"=r"(y)
+			:"0"(x),"1"(y)
+			);
+
+		n_unroll--;
 		while( n_unroll-- ){ 
 			//ymm0  = *(x  ); // Load
 			//ymm1  = *(x+1); // Load
@@ -278,14 +298,6 @@ double fast_ddot(size_t n, const double* x, const double* y)
 			//y+=16;
 			__asm__ __volatile__(
 				"\n\t"
-				"vmovupd   0*8(%[x]), %%ymm0 \n\t"
-				"vmovupd   4*8(%[x]), %%ymm1 \n\t"
-				"vmovupd   8*8(%[x]), %%ymm2 \n\t"
-				"vmovupd  12*8(%[x]), %%ymm3 \n\t"
-				"vmovupd   0*8(%[y]), %%ymm4 \n\t"
-				"vmovupd   4*8(%[y]), %%ymm5 \n\t"
-				"vmovupd   8*8(%[y]), %%ymm6 \n\t"
-				"vmovupd  12*8(%[y]), %%ymm7 \n\t"
 				"vmulpd      %%ymm0 , %%ymm4 , %%ymm8 \n\t"
 				"vmulpd      %%ymm1 , %%ymm5 , %%ymm9 \n\t"
 				"vmulpd      %%ymm2 , %%ymm6 , %%ymm10\n\t"
@@ -294,6 +306,14 @@ double fast_ddot(size_t n, const double* x, const double* y)
 				"vaddpd      %%ymm9 , %%ymm13, %%ymm13\n\t"
 				"vaddpd      %%ymm10, %%ymm14, %%ymm14\n\t"
 				"vaddpd      %%ymm11, %%ymm15, %%ymm15\n\t"
+				"vmovupd   0*8(%[x]), %%ymm0 \n\t"
+				"vmovupd   4*8(%[x]), %%ymm1 \n\t"
+				"vmovupd   8*8(%[x]), %%ymm2 \n\t"
+				"vmovupd  12*8(%[x]), %%ymm3 \n\t"
+				"vmovupd   0*8(%[y]), %%ymm4 \n\t"
+				"vmovupd   4*8(%[y]), %%ymm5 \n\t"
+				"vmovupd   8*8(%[y]), %%ymm6 \n\t"
+				"vmovupd  12*8(%[y]), %%ymm7 \n\t"
 				"\n\t"
 				"subq $-16*8, %[x]\n\t"
 				"subq $-16*8, %[y]\n\t"
@@ -303,6 +323,20 @@ double fast_ddot(size_t n, const double* x, const double* y)
 				);
 
 		}
+		__asm__ __volatile__(
+			"\n\t"
+			"vmulpd      %%ymm0 , %%ymm4 , %%ymm8 \n\t"
+			"vmulpd      %%ymm1 , %%ymm5 , %%ymm9 \n\t"
+			"vmulpd      %%ymm2 , %%ymm6 , %%ymm10\n\t"
+			"vmulpd      %%ymm3 , %%ymm7 , %%ymm11\n\t"
+			"vaddpd      %%ymm8 , %%ymm12, %%ymm12\n\t"
+			"vaddpd      %%ymm9 , %%ymm13, %%ymm13\n\t"
+			"vaddpd      %%ymm10, %%ymm14, %%ymm14\n\t"
+			"vaddpd      %%ymm11, %%ymm15, %%ymm15\n\t"
+			"\n\t"
+			::);
+
+
 		if( n & 8 ){
 			//ymm0  = *(x  ); // Load
 			//ymm1  = *(x+1); // Load
