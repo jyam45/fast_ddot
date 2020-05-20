@@ -1,4 +1,7 @@
-TESTER
+WHAT IS ?
+  This is a inner-product function tuned by using AVX, not AVX2 or FMA
+
+TEST PROGRAMS
   - unit_test  : result check
   - speed_test : compare speed from original ddot
   - total_test : compare speed with variety data size
