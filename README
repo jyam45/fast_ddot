@@ -1,0 +1,13 @@
+TESTER
+  - unit_test  : result check
+  - speed_test : compare speed from original ddot
+  - total_test : compare speed with variety data size
+
+HOW TO BUILD
+  $ make lib
+  $ make
+
+HOW TO REBUILD
+  $ make clean
+  $ make
+
